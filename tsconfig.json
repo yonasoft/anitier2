@@ -4,8 +4,10 @@
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
     "paths": {
-      "app/*": ["./packages/app/*"],
-      "@my/ui/*": ["./packages/ui/*"]
+      "@root/*": ["./*"],
+      "@packages/*": ["./packages/*"],
+      "@apps/*": ["./apps/*"],
+      "react-native$": ["react-native-web"]
     }
   },
   "extends": "./tsconfig.base",
