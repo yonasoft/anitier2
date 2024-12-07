@@ -16,6 +16,7 @@
     "watch": "tamagui-build --skip-types --watch"
   },
   "dependencies": {
+    "@my/config": "file:",
     "@tamagui/animations-react-native": "^1.119.3",
     "@tamagui/font-inter": "^1.119.3",
     "@tamagui/react-native-media-driver": "^1.119.3",
