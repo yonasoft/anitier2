@@ -1,8 +1,11 @@
+import 'package:anitier2/src/features/account/presentation/pages/account_page.dart';
 import 'package:anitier2/src/features/create/presentation/pages/create.dart';
 import 'package:anitier2/src/features/home/presentation/pages/home.dart';
 import 'package:anitier2/src/features/main/models/navigation_item.dart';
 import 'package:anitier2/src/features/main/presentation/widgets/bot_navbar.dart';
 import 'package:anitier2/src/features/main/presentation/widgets/nav_rail.dart';
+import 'package:anitier2/src/features/saved/presentation/pages/saved_page.dart';
+import 'package:anitier2/src/features/templates/presentation/pages/templates_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -58,19 +61,16 @@ class _MainPageState extends State<MainPage> {
       pages: [
         if (_selectedNavIndex == 0)
           MaterialPage(key: ValueKey('home'), child: HomePage()),
-        // if (_selectedNavIndex == 1)
-        // MaterialPage(key: ValueKey('templates'), child: TemplatesPage()),
+        if (_selectedNavIndex == 1)
+          MaterialPage(key: ValueKey('templates'), child: TemplatesPage()),
         if (_selectedNavIndex == 2)
           MaterialPage(key: ValueKey('create'), child: CreatePage()),
-        // if (_selectedNavIndex == 3)
-        //   MaterialPage(key: ValueKey('saved'), child: SavedPage()),
-        // if (_selectedNavIndex == 4)
-        //   MaterialPage(key: ValueKey('account'), child: AccountPage()),
+        if (_selectedNavIndex == 3)
+          MaterialPage(key: ValueKey('saved'), child: SavedPage()),
+        if (_selectedNavIndex == 4)
+          MaterialPage(key: ValueKey('account'), child: AccountPage()),
       ],
-      onDidRemovePage: (page) => {
-        setState(() {
-        })
-      },
+      onDidRemovePage: (page) => {setState(() {})},
     );
 
     return SafeArea(
