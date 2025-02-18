@@ -1,3 +1,5 @@
+import 'package:anitier2/src/features/create/presentation/pages/create.dart';
+import 'package:anitier2/src/features/home/presentation/pages/home.dart';
 import 'package:anitier2/src/features/main/models/navigation_item.dart';
 import 'package:anitier2/src/features/main/presentation/widgets/bot_navbar.dart';
 import 'package:anitier2/src/features/main/presentation/widgets/nav_rail.dart';
@@ -52,6 +54,25 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(this.context).size.width;
 
+    final navigator = Navigator(
+      pages: [
+        if (_selectedNavIndex == 0)
+          MaterialPage(key: ValueKey('home'), child: HomePage()),
+        // if (_selectedNavIndex == 1)
+        // MaterialPage(key: ValueKey('templates'), child: TemplatesPage()),
+        if (_selectedNavIndex == 2)
+          MaterialPage(key: ValueKey('create'), child: CreatePage()),
+        // if (_selectedNavIndex == 3)
+        //   MaterialPage(key: ValueKey('saved'), child: SavedPage()),
+        // if (_selectedNavIndex == 4)
+        //   MaterialPage(key: ValueKey('account'), child: AccountPage()),
+      ],
+      onDidRemovePage: (page) => {
+        setState(() {
+        })
+      },
+    );
+
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: screenWidth < 600
@@ -68,6 +89,7 @@ class _MainPageState extends State<MainPage> {
                   navItems: _navigationItems,
                   selectedIndex: _selectedNavIndex,
                   onTap: _onTap),
+            Expanded(child: navigator)
           ],
         ),
       ),
