@@ -1,5 +1,6 @@
 import 'package:anitier2/src/features/skeleton/models/navigation_item.dart';
 import 'package:anitier2/src/features/skeleton/presentation/widgets/bot_navbar.dart';
+import 'package:anitier2/src/features/skeleton/presentation/widgets/nav_rail.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,7 +9,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
 class _HomePageState extends State<HomePage> {
   int _selectedNavIndex = 0;
   final _navigationItems = [
@@ -19,11 +19,11 @@ class _HomePageState extends State<HomePage> {
     NavigationItem(icon: Icons.account_box, label: 'Account', route: 'account')
   ];
 
-  void _onTap(int index) => {
-        setState(() {
-          _selectedNavIndex = index;
-        })
-      };
+  void _onTap(int index) {
+    setState(() {
+      _selectedNavIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,15 @@ class _HomePageState extends State<HomePage> {
                 onTap: _onTap,
               )
             : null,
-        body: Row(),
+        body: Row(
+          children: [
+            if (screenWidth >= 600)
+              NavRail(
+                  navItems: _navigationItems,
+                  selectedIndex: _selectedNavIndex,
+                  onTap: _onTap)
+          ],
+        ),
       ),
     );
   }
