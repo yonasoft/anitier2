@@ -16,7 +16,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
-  go_router: ^14.8.0
   profanity_filter: ^2.0.0
   jikan_api: ^2.2.1
   graphql_codegen: ^1.1.1
