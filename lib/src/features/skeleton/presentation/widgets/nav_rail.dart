@@ -37,7 +37,7 @@ class _NavRailState extends State<NavRail> {
     return NavigationRail(
       destinations: [...navRailDestinations],
       selectedIndex: widget.selectedIndex,
-      onDestinationSelected: (index) => widget.onTap,
+      onDestinationSelected: (index) => widget.onTap(index),
       extended: screenWidth >= 840,
     );
   }

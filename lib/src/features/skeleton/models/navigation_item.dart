@@ -4,10 +4,11 @@ class NavigationItem {
   final IconData icon;
   final String label;
   final String route;
+  final String? tooltip;
 
-  NavigationItem({
-    required this.icon,
-    required this.label,
-    required this.route,
-  });
+  NavigationItem(
+      {required this.icon,
+      required this.label,
+      required this.route,
+      this.tooltip});
 }
