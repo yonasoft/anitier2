@@ -1,9 +1,10 @@
-import 'package:anitier2/src/features/skeleton/presentation/pages/main_page.dart';
+import 'package:anitier2/src/features/main/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromRGBO(88, 133, 175, 1)),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: MainPage(),
     );
   }
 }
