@@ -21,9 +21,8 @@ class _BotNavbarState extends State<BotNavbar> {
   @override
   Widget build(BuildContext context) {
     final botNavItems = widget.navItems
-        .map((item) => item.route != 'create'
-            ? BottomNavigationBarItem(icon: Icon(item.icon), label: item.label)
-            : null)
+        .map((item) => BottomNavigationBarItem(
+            icon: Icon(item.icon), label: item.label, tooltip: item.tooltip))
         .whereType<BottomNavigationBarItem>()
         .toList();
 
