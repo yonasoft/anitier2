@@ -1,4 +1,4 @@
-import 'package:anitier2/src/features/skeleton/presentation/pages/MainPage.dart';
+import 'package:anitier2/src/features/skeleton/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
