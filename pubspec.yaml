@@ -1,5 +1,5 @@
 name: anitier2
-description: 'A new Flutter project.'
+description: 'Anime tier list builder'
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -24,6 +24,8 @@ dependencies:
   google_sign_in: ^6.2.2
   firebase_ui_oauth_google: ^1.4.1
   firebase_analytics: ^11.4.3
+  google_fonts: ^6.2.1
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -39,7 +41,7 @@ flutter:
   uses-material-design: true
 
   assets:
-
+    - assets/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

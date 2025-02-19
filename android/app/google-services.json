@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1015071636195-nhk0vjv7pj8a77g0nc1hh4as1vchjk6s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yonasoft.anitier2",
+            "certificate_hash": "58935dd34ae512f33ad1c993790b9af22c3e1761"
+          }
+        },
+        {
           "client_id": "1015071636195-cf25gups6maejbtsga8o950rhoae21mq.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "1015071636195-cf25gups6maejbtsga8o950rhoae21mq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1015071636195-88bafoee7oi76c93524d8mbe60cte2ok.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yonasoft.anitier2"
+              }
             }
           ]
         }
