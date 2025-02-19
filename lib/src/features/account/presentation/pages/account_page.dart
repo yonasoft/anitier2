@@ -21,7 +21,7 @@ class AccountPage extends StatelessWidget {
             auth: FirebaseAuth.instance,
             providers: [
               GoogleProvider(
-                  clientId: String.fromEnvironment('GOOGLE_CLIENT_ID')),
+                  clientId: const String.fromEnvironment('GOOGLE_CLIENT_ID')),
               EmailAuthProvider(),
               PhoneAuthProvider(),
             ],
