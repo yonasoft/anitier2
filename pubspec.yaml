@@ -24,6 +24,7 @@ dependencies:
   google_sign_in: ^6.2.2
   firebase_ui_oauth_google: ^1.4.1
   flutter_dotenv: ^5.2.1
+  firebase_analytics: ^11.4.3
 
 dev_dependencies:
   flutter_test:
