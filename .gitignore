@@ -47,3 +47,5 @@ firebase.json
 
 *.env
 
+
+.vercel
