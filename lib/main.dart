@@ -2,6 +2,7 @@ import 'package:anitier2/src/features/main/presentation/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 
@@ -12,6 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(const MyApp());
 }
 
