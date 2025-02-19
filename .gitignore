@@ -46,6 +46,5 @@ app.*.map.json
 firebase.json
 
 *.env
-
-
 .vercel
+**/GoogleService-Info.plist
