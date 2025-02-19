@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -21,7 +20,8 @@ class AccountPage extends StatelessWidget {
           return SignInScreen(
             auth: FirebaseAuth.instance,
             providers: [
-              GoogleProvider(clientId: dotenv.env['GOOGLE_CLIENT_ID']!),
+              GoogleProvider(
+                  clientId: String.fromEnvironment('GOOGLE_CLIENT_ID')),
               EmailAuthProvider(),
               PhoneAuthProvider(),
             ],
