@@ -1,5 +1,6 @@
 import 'package:anitier2/src/features/main/presentation/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -19,6 +20,7 @@ void main() async {
     await dotenv.load(fileName: "assets/.env");
   }
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  FirebaseUIAuth.signOut();
   runApp(const MyApp());
 }
 
@@ -28,7 +30,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'AniTier',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromRGBO(88, 133, 175, 1)),
