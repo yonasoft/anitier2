@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">AniTier</string>
-	<string name="facebook_app_id">1260824615019182</string>
-	<string name="fb_login_protocol_scheme">fb1260824615019182</string>
-  	<string name="facebook_client_token">9801f9f8204ecb29a38788badfc57733</string>
-</resources>
