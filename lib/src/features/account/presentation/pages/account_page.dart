@@ -1,7 +1,8 @@
 import 'package:anitier2/src/features/account/presentation/pages/account_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart'
-    hide EmailAuthProvider, PhoneAuthProvider;
+    hide EmailAuthProvider, PhoneAuthProvider, FacebookAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,10 @@ class AccountPage extends StatelessWidget {
                   clientId: kIsWeb
                       ? const String.fromEnvironment('GOOGLE_CLIENT_ID')
                       : dotenv.env['GOOGLE_CLIENT_ID']!),
+              FacebookProvider(
+                  clientId: kIsWeb
+                      ? const String.fromEnvironment('FACEBOOK_CLIENT_ID')
+                      : dotenv.env['FACEBOOK_CLIENT_ID']!),
               EmailAuthProvider(),
               PhoneAuthProvider(),
             ],
