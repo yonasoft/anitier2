@@ -23,6 +23,7 @@ class AccountPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.hasError.toString()));
         } else if (!snapshot.hasData) {
           return SignInScreen(
             auth: FirebaseAuth.instance,
@@ -61,8 +62,9 @@ class AccountPage extends StatelessWidget {
               );
             },
           );
+        } else {
+          return const AccountSettings();
         }
-        return const AccountSettings();
       },
     );
   }
