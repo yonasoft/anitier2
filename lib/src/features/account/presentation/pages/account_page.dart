@@ -1,6 +1,10 @@
 import 'package:anitier2/src/features/account/presentation/pages/account_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart'
-    hide EmailAuthProvider, PhoneAuthProvider, FacebookAuthProvider;
+    hide
+        EmailAuthProvider,
+        PhoneAuthProvider,
+        FacebookAuthProvider,
+        GithubAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -19,6 +23,7 @@ class AccountPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.hasError.toString()));
         } else if (!snapshot.hasData) {
           return SignInScreen(
             auth: FirebaseAuth.instance,
@@ -57,8 +62,9 @@ class AccountPage extends StatelessWidget {
               );
             },
           );
+        } else {
+          return const AccountSettings();
         }
-        return const AccountSettings();
       },
     );
   }
