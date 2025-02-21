@@ -5,14 +5,15 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserInfoSection extends StatelessWidget {
-  final User? _user;
-  const UserInfoSection(this._user, {super.key});
+  final User? user;
+  final User? currentUser;
+  const UserInfoSection({super.key, this.user, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
-    final String? avatar = _user?.photoURL;
-    final String? displayName = _user?.displayName;
-    final String? email = _user?.email;
+    final String? avatar = user?.photoURL;
+    final String? displayName = user?.displayName;
+    final String? email = user?.email;
 
     return Center(
       child: Column(
