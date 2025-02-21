@@ -12,7 +12,8 @@ class CurrentUserPage extends StatelessWidget {
       return (constraints.maxWidth >= 600)
           ? Row(children: [
               Expanded(child: Text('test')),
-              SizedBox(width: 272, child: userInfo)
+              VerticalDivider(),
+              SizedBox(width: 280, child: userInfo)
             ])
           : Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
