@@ -20,8 +20,6 @@ void main() async {
     await dotenv.load(fileName: "assets/.env");
   }
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  FirebaseAuth.instance.signOut();
-  FirebaseUIAuth.signOut();
   runApp(const MyApp());
 }
 

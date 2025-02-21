@@ -47,6 +47,10 @@ class _MainPageState extends State<MainPage> {
         tooltip: 'Manage your accounts')
   ];
 
+  @override
+  void initState() {
+    
+  }
   void _onTap(int index) {
     setState(() {
       _selectedNavIndex = index;
