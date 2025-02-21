@@ -10,17 +10,27 @@ class CurrentUserPage extends StatelessWidget {
 
     return LayoutBuilder(builder: (context, constraints) {
       return (constraints.maxWidth >= 600)
-          ? Row(children: [
+          ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(child: Text('test')),
-              VerticalDivider(),
-              SizedBox(width: 280, child: userInfo)
-            ])
-          : Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: userInfo,
+              VerticalDivider(thickness: 1),
+              SingleChildScrollView(
+                child: SizedBox(
+                    width: 280,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: userInfo,
+                    )),
               )
-            ]);
+            ])
+          : SingleChildScrollView(
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: userInfo,
+                )
+              ]),
+            );
     });
   }
 }
