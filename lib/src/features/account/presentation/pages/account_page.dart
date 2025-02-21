@@ -1,4 +1,4 @@
-import 'package:anitier2/src/features/account/presentation/pages/account_settings.dart';
+import 'package:anitier2/src/features/account/presentation/pages/current_user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide
         EmailAuthProvider,
@@ -63,7 +63,7 @@ class AccountPage extends StatelessWidget {
             },
           );
         } else {
-          return const AccountSettings();
+          return const CurrentUserPage();
         }
       },
     );
