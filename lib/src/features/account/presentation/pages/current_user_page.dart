@@ -32,6 +32,12 @@ class _CurrentUserPageState extends State<CurrentUserPage> {
       child: Column(
         children: [
           UserInfoSection(user: _currentUser!),
+          Padding(
+              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+              child: Divider()),
+          OutlinedButton(
+              onPressed: () => showChangePasswordDialog(context),
+              child: Text('Change Password')),
         ],
       ),
     );
@@ -53,4 +59,96 @@ class _CurrentUserPageState extends State<CurrentUserPage> {
             );
     });
   }
+}
+
+Future<void> showChangePasswordDialog(BuildContext context) async {
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  String errorMessage = "";
+
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Change Password'),
+            content: SizedBox(
+              width: 400,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: newPasswordController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter new password',
+                      errorText: errorMessage.isNotEmpty ? errorMessage : null,
+                    ),
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: confirmPasswordController,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm new password',
+                      errorText: errorMessage.isNotEmpty ? errorMessage : null,
+                    ),
+                    obscureText: true,
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final newPassword = newPasswordController.text.trim();
+                  final confirmPassword = confirmPasswordController.text.trim();
+                  if (newPassword.isEmpty || confirmPassword.isEmpty) {
+                    setState(() {
+                      errorMessage = "Both fields are required";
+                    });
+                    return;
+                  }
+
+                  if (newPassword.length < 6) {
+                    setState(() {
+                      errorMessage =
+                          "Password must be at least 6 characters long";
+                    });
+                    return;
+                  }
+
+                  if (newPassword != confirmPassword) {
+                    setState(() {
+                      errorMessage = "Passwords do not match";
+                    });
+                    return;
+                  }
+
+                  try {
+                    await FirebaseAuth.instance.currentUser
+                        ?.updatePassword(newPassword);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Password changed successfully')),
+                    );
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    setState(() {
+                      errorMessage =
+                          "Failed to change password: ${e.toString()}";
+                    });
+                  }
+                },
+                child: Text('Change'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
 }
