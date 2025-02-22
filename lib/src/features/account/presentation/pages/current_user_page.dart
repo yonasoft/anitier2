@@ -31,7 +31,7 @@ class _CurrentUserPageState extends State<CurrentUserPage> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          UserInfoSection(user: _currentUser, currentUser: _currentUser),
+          UserInfoSection(user: _currentUser!),
         ],
       ),
     );
