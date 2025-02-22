@@ -45,7 +45,7 @@ class AccountPage extends StatelessWidget {
                 child: Column(
                   children: [
                     const Text('Or'),
-                    ElevatedButton(
+                    OutlinedButton(
                       onPressed: () async {
                         try {
                           await FirebaseAuth.instance.signInAnonymously();
@@ -69,3 +69,4 @@ class AccountPage extends StatelessWidget {
     );
   }
 }
+
