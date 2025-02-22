@@ -48,9 +48,7 @@ class _MainPageState extends State<MainPage> {
   ];
 
   @override
-  void initState() {
-    
-  }
+  void initState() {}
   void _onTap(int index) {
     setState(() {
       _selectedNavIndex = index;
@@ -82,6 +80,7 @@ class _MainPageState extends State<MainPage> {
               )
             : null,
         body: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (screenWidth >= 600)
               NavRail(

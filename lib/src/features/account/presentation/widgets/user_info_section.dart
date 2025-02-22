@@ -4,36 +4,69 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserInfoSection extends StatelessWidget {
-  final User? user;
-  final User? currentUser;
-  const UserInfoSection({super.key, this.user, this.currentUser});
+class UserInfoSection extends StatefulWidget {
+  final User user;
+  const UserInfoSection({super.key, required this.user});
+
+  @override
+  State<UserInfoSection> createState() => _UserInfoSectionState();
+}
+
+class _UserInfoSectionState extends State<UserInfoSection> {
+  late User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+  }
+
+  Future<void> handleAvatarTap() async {
+    await showAvatarSelectionDialog(context);
+    setState(() {
+      currentUser = FirebaseAuth.instance.currentUser;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String? avatar = user?.photoURL;
-    final String? displayName = user?.displayName;
-    final String? email = user?.email;
+    final avatarWidget = UserProfileAvatar(currentUser?.photoURL ?? "");
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          UserProfileAvatar(avatar),
-          SizedBox(height: 12),
-          Text(displayName ?? "",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-          SizedBox(height: 8),
-          Text(email ?? "", style: TextStyle(fontSize: 14)),
-          SizedBox(height: 12),
-          ElevatedButton.icon(
+          GestureDetector(
+            child: avatarWidget,
+            onTap: () async {
+              if (widget.user.uid == currentUser?.uid) {
+                await handleAvatarTap();
+              }
+            },
+          ),
+          const SizedBox(height: 8),
+          Text(
+            currentUser?.displayName ?? "",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            currentUser?.email ?? "",
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 12),
+          if (widget.user.uid == currentUser?.uid)
+            ElevatedButton.icon(
               onPressed: () async {
                 bool shouldSignOut = await showSignOutDialog(context);
 
-                if (shouldSignOut == true) {
-                  FirebaseAuth.instance.signOut();
-                  FirebaseUIAuth.signOut();
+                if (shouldSignOut) {
+                  await FirebaseAuth.instance.signOut();
+                  await FirebaseUIAuth.signOut();
+                  setState(() {
+                    currentUser = null;
+                  });
                 }
               },
               style: redButtonStyle,
@@ -41,7 +74,8 @@ class UserInfoSection extends StatelessWidget {
                 "Sign out",
                 style: TextStyle(color: Colors.red.shade300),
               ),
-              icon: Icon(Icons.logout))
+              icon: const Icon(Icons.logout),
+            )
         ],
       ),
     );
@@ -77,4 +111,74 @@ Future<bool> showSignOutDialog(BuildContext context) async {
         },
       )) ??
       false;
+}
+
+Future<void> showAvatarSelectionDialog(BuildContext context) async {
+  TextEditingController urlController = TextEditingController();
+
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Select Avatar'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: urlController,
+              decoration: InputDecoration(
+                labelText: 'Enter Image URL',
+                hintText: 'https://example.com/avatar.png',
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.photo_library),
+              label: Text('Pick from device'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              var message = "URL is empty or choose from gallery!";
+              if (urlController.text.isNotEmpty) {
+                try {
+                  print(
+                      "Attempting to update profile with URL: ${urlController.text}");
+
+                  await FirebaseAuth.instance.currentUser
+                      ?.updatePhotoURL(urlController.text);
+                  await FirebaseAuth.instance.currentUser!.reload();
+
+                  print("Update profile completed");
+
+                  message = "Photo URL uploaded successfully!";
+                } catch (e) {
+                  print("Photo URL upload failed! Error: $e");
+                  message = "Photo URL upload failed!";
+                }
+              }
+
+              final snackBar = SnackBar(
+                content: Text(message),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              Navigator.of(context).pop();
+            },
+            child: Text('Save'),
+          ),
+        ],
+      );
+    },
+  );
 }

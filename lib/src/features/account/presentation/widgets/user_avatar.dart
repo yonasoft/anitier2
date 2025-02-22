@@ -11,6 +11,7 @@ class UserProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("avatar: $avatar");
     return CircleAvatar(
       minRadius: 56,
       child: ClipOval(
@@ -22,8 +23,10 @@ class UserProfileAvatar extends StatelessWidget {
                 height: 112,
                 placeholder: (context, url) =>
                     const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.account_circle, size: 56),
+                errorWidget: (context, url, error) {
+                  print("Image load error: $error");
+                  return const Icon(Icons.account_circle, size: 56);
+                },
               )
             : Icon(Icons.account_circle, size: 56),
       ),
