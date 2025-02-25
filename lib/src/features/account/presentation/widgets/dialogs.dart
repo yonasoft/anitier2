@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:anitier2/src/core/constants.dart';
+import 'package:anitier2/src/features/account/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> showChangeDisplayNameDialog(BuildContext context) async {
   TextEditingController nameController = TextEditingController();
@@ -87,31 +94,80 @@ Future<bool> showSignOutDialog(BuildContext context) async {
 
 Future<void> showAvatarSelectionDialog(BuildContext context) async {
   TextEditingController urlController = TextEditingController();
+  File? _imageFile;
 
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Select Avatar'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: urlController,
-              decoration: InputDecoration(
-                labelText: 'Enter Image URL',
-                hintText: 'https://example.com/avatar.png',
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextField(
+                controller: urlController,
+                decoration: InputDecoration(
+                  labelText: 'Enter Image URL',
+                  hintText: 'https://example.com/avatar.png',
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () async {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(Icons.photo_library),
-              label: Text('Pick from device'),
-            ),
-          ],
+              SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  if (!kIsWeb) {
+                    final pickedImage = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    _imageFile = File(pickedImage!.path);
+                    print("Image file path: ${_imageFile?.path}");
+                  } else {}
+                  if (_imageFile == null) {
+                    print("No image file selected.");
+                    return;
+                  }
+                  if (!await _imageFile!.exists()) {
+                    print("Image file does not exist. Aborting upload.");
+                    return;
+                  }
+                  final storageRef = FirebaseStorage.instance.ref();
+                  final profilePictureRef = storageRef.child(
+                      "/users/${FirebaseAuth.instance.currentUser!.uid}/${Uuid().v4()}");
+                  try {
+                    await deleteExistingUserPhoto();
+                    print("Attempting to upload file...");
+                    final taskSnapshot = await profilePictureRef.putFile(
+                      _imageFile!,
+                      SettableMetadata(contentType: "image/jpeg"),
+                    );
+                    print("Upload complete: ${taskSnapshot.state}");
+                    final downloadURL =
+                        await profilePictureRef.getDownloadURL();
+                    print("Download URL: $downloadURL");
+
+                    await FirebaseAuth.instance.currentUser
+                        ?.updatePhotoURL(downloadURL);
+                    await FirebaseAuth.instance.currentUser!.reload();
+                  } on FirebaseException catch (e) {
+                    print("Upload failed: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Error: ${e.message}",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  } finally {
+                    Navigator.of(context).pop();
+                  }
+                },
+                icon: Icon(Icons.photo_library),
+                label: Text('Pick from device'),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -131,6 +187,7 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                   await FirebaseAuth.instance.currentUser
                       ?.updatePhotoURL(urlController.text);
                   await FirebaseAuth.instance.currentUser!.reload();
+                  await deleteExistingUserPhoto();
 
                   print("Update profile completed");
 
