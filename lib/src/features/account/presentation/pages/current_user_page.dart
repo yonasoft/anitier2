@@ -1,6 +1,18 @@
 import 'package:anitier2/src/features/account/presentation/widgets/user_info_section.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anitier2/src/features/account/utils.dart';
+import 'package:anitier2/src/features/account/presentation/widgets/dialogs.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    hide
+        EmailAuthProvider,
+        PhoneAuthProvider,
+        FacebookAuthProvider,
+        GithubAuthProvider;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CurrentUserPage extends StatefulWidget {
   const CurrentUserPage({super.key});
@@ -27,17 +39,62 @@ class _CurrentUserPageState extends State<CurrentUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userSettingArea = [
+      Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+        child: Divider(),
+      ),
+      OutlinedButton(
+          onPressed: () => showChangePasswordDialog(context),
+          child: Text('Change Password')),
+      SizedBox(
+        height: 6,
+      ),
+      OutlinedButton(
+        onPressed: () async {
+          final authProviders = getAuthProviders(_currentUser!);
+          final reauthSuccess = await showReauthenticateDialog(
+              context: context, providers: [...await authProviders]);
+          if (reauthSuccess) {
+            final confirmed = await showDeleteConfirmationDialog(
+              context,
+              _currentUser!.email!,
+            );
+
+            if (confirmed) {
+              try {
+                await _currentUser!.delete();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Account deleted successfully.")),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Failed to delete account: $e")),
+                );
+              }
+            }
+          }
+        },
+        child: Text(
+          'Delete Account',
+          style: TextStyle(
+            color: Colors.red.shade300,
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+        child: Divider(),
+      ),
+    ];
     final userInfoArea = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          UserInfoSection(user: _currentUser!),
-          Padding(
-              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-              child: Divider()),
-          OutlinedButton(
-              onPressed: () => showChangePasswordDialog(context),
-              child: Text('Change Password')),
+          UserInfoSection(
+            user: _currentUser!,
+          ),
+          ...userSettingArea,
         ],
       ),
     );

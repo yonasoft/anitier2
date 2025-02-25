@@ -1,12 +1,10 @@
-
-
 import 'package:anitier2/src/core/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangeDisplayNameDialog(BuildContext context) async {
   TextEditingController nameController = TextEditingController();
-  
+
   await showDialog(
     context: context,
     builder: (context) {
@@ -33,7 +31,7 @@ Future<void> showChangeDisplayNameDialog(BuildContext context) async {
                   await FirebaseAuth.instance.currentUser
                       ?.updateDisplayName(nameController.text);
                   await FirebaseAuth.instance.currentUser?.reload();
-                  
+
                   final snackBar = SnackBar(
                     content: Text('Display name updated successfully!'),
                   );
@@ -155,4 +153,77 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
       );
     },
   );
+}
+
+Future<bool> showDeleteConfirmationDialog(
+    BuildContext context, String userEmail) async {
+  final deleteTextController = TextEditingController();
+  final emailController = TextEditingController();
+
+  return await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              String? deleteTextError;
+              String? emailError;
+
+              void validateAndSubmit() {
+                final deleteText = deleteTextController.text.trim();
+                final email = emailController.text.trim();
+
+                setState(() {
+                  deleteTextError = null;
+                  emailError = null;
+
+                  if (deleteText != "delete account") {
+                    deleteTextError = "Please type 'delete account'.";
+                  }
+                  if (email != userEmail) {
+                    emailError = "Email does not match.";
+                  }
+                });
+
+                if (deleteTextError == null && emailError == null) {
+                  Navigator.of(context).pop(true);
+                }
+              }
+
+              return AlertDialog(
+                title: Text("Confirm Deletion"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: deleteTextController,
+                      decoration: InputDecoration(
+                        labelText: "Type 'delete account'",
+                        errorText: deleteTextError,
+                      ),
+                    ),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: "Enter your email",
+                        errorText: emailError,
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: validateAndSubmit,
+                    child: Text("Confirm"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ) ??
+      false;
 }
