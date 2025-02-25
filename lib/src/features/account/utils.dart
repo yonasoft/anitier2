@@ -10,6 +10,9 @@ import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 Future<List<AuthProvider>> getAuthProviders(User user) async {
   final List<AuthProvider> providers = [];
@@ -41,4 +44,29 @@ Future<List<AuthProvider>> getAuthProviders(User user) async {
   }
 
   return providers;
+}
+
+Future<bool> deleteExistingUserPhoto() async {
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null || currentUser.photoURL == null) {
+    return false;
+  }
+
+  final photoURL = currentUser.photoURL!;
+  try {
+    final decodedPath = Uri.decodeFull(Uri.parse(photoURL).path);
+    final bucketPath = decodedPath.split('/o/').last.split('?').first;
+
+    final fileRef = FirebaseStorage.instance.ref().child(bucketPath);
+
+    await fileRef.getMetadata();
+
+    await fileRef.delete();
+    return true;
+  } on FirebaseException catch (e) {
+    if (e.code == 'object-not-found') {
+      return false;
+    }
+    throw e;
+  }
 }

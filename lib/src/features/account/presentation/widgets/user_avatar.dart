@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileAvatar extends StatelessWidget {
@@ -16,14 +15,12 @@ class UserProfileAvatar extends StatelessWidget {
       minRadius: 56,
       child: ClipOval(
         child: avatar != null
-            ? CachedNetworkImage(
-                imageUrl: avatar!,
+            ? Image.network(
+                avatar!,
                 fit: BoxFit.cover,
                 width: 112,
                 height: 112,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) {
+                errorBuilder: (context, url, error) {
                   print("Image load error: $error");
                   return const Icon(Icons.account_circle, size: 56);
                 },
