@@ -10,7 +10,6 @@ import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,7 +37,6 @@ Future<List<AuthProvider>> getAuthProviders(User user) async {
         providers.add(PhoneAuthProvider());
         break;
       default:
-        // Handle unknown providers if necessary
         break;
     }
   }
