@@ -4,7 +4,6 @@ import 'package:anitier2/src/core/constants.dart';
 import 'package:anitier2/src/features/account/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -147,7 +146,6 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                         ?.updatePhotoURL(downloadURL);
                     await FirebaseAuth.instance.currentUser!.reload();
                   } on FirebaseException catch (e) {
-
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(

@@ -101,13 +101,16 @@ class _CurrentUserPageState extends State<CurrentUserPage> {
 
     return LayoutBuilder(builder: (context, constraints) {
       return (constraints.maxWidth >= 600)
-          ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(child: Text('test')),
-              VerticalDivider(thickness: 1),
-              SingleChildScrollView(
-                child: SizedBox(width: 280, child: userInfoArea),
-              )
-            ])
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Text('test')),
+                VerticalDivider(thickness: 1),
+                SingleChildScrollView(
+                  child: SizedBox(width: 280, child: userInfoArea),
+                ),
+              ],
+            )
           : SingleChildScrollView(
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
