@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:anitier2/src/core/constants.dart';
 import 'package:anitier2/src/features/account/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,28 +115,17 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
               SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () async {
-                  final pickedImage = await ImagePicker()
-                      .pickImage(source: ImageSource.gallery);
-                  _imageFile = File(pickedImage!.path);
-                  print("Image file path: ${_imageFile?.path}");
-
-                  if (_imageFile == null) {
-                    print("No image file selected.");
-                    return;
-                  }
-                  if (!await _imageFile!.exists()) {
-                    print("Image file does not exist. Aborting upload.");
-                    return;
-                  }
-                  final storageRef = FirebaseStorage.instance.ref();
-                  final profilePictureRef = storageRef.child(
-                      "/users/${FirebaseAuth.instance.currentUser!.uid}/${Uuid().v4()}");
                   try {
+                    final pickedImage = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    _imageFile = File(pickedImage!.path);
+                    final bytes = await pickedImage.readAsBytes();
+                    final storageRef = FirebaseStorage.instance.ref();
+                    final profilePictureRef = storageRef.child(
+                        "/users/${FirebaseAuth.instance.currentUser!.uid}/${Uuid().v4()}");
                     await deleteExistingUserPhoto();
-
-                    final taskSnapshot = await profilePictureRef.putFile(
-                      _imageFile!,
-                      SettableMetadata(contentType: "image/png"),
+                    final taskSnapshot = await profilePictureRef.putData(
+                      bytes,
                     );
                     final downloadURL =
                         await profilePictureRef.getDownloadURL();
@@ -145,6 +133,7 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                     await FirebaseAuth.instance.currentUser
                         ?.updatePhotoURL(downloadURL);
                     await FirebaseAuth.instance.currentUser!.reload();
+                    Navigator.of(context).pop();
                   } on FirebaseException catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -154,9 +143,7 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                         ),
                       ),
                     );
-                  } finally {
-                    Navigator.of(context).pop();
-                  }
+                  } 
                 },
                 icon: Icon(Icons.photo_library),
                 label: Text('Pick from device'),

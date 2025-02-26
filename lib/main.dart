@@ -18,6 +18,9 @@ void main() async {
   } else {
     await dotenv.load(fileName: "assets/.env");
   }
+  if (FirebaseAuth.instance.currentUser != null) {
+    await FirebaseAuth.instance.currentUser!.reload();
+  }
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(const MyApp());
 }
