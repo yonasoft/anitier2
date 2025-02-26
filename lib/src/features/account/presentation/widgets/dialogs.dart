@@ -117,12 +117,11 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
               SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () async {
-                  if (!kIsWeb) {
-                    final pickedImage = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
-                    _imageFile = File(pickedImage!.path);
-                    print("Image file path: ${_imageFile?.path}");
-                  } else {}
+                  final pickedImage = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+                  _imageFile = File(pickedImage!.path);
+                  print("Image file path: ${_imageFile?.path}");
+
                   if (_imageFile == null) {
                     print("No image file selected.");
                     return;
@@ -136,21 +135,19 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                       "/users/${FirebaseAuth.instance.currentUser!.uid}/${Uuid().v4()}");
                   try {
                     await deleteExistingUserPhoto();
-                    print("Attempting to upload file...");
+
                     final taskSnapshot = await profilePictureRef.putFile(
                       _imageFile!,
-                      SettableMetadata(contentType: "image/jpeg"),
+                      SettableMetadata(contentType: "image/png"),
                     );
-                    print("Upload complete: ${taskSnapshot.state}");
                     final downloadURL =
                         await profilePictureRef.getDownloadURL();
-                    print("Download URL: $downloadURL");
 
                     await FirebaseAuth.instance.currentUser
                         ?.updatePhotoURL(downloadURL);
                     await FirebaseAuth.instance.currentUser!.reload();
                   } on FirebaseException catch (e) {
-                    print("Upload failed: $e");
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
