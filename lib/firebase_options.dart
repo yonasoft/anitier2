@@ -47,6 +47,7 @@ class DefaultFirebaseOptions {
     projectId: 'anitier2-b527d',
     authDomain: 'anitier2-b527d.firebaseapp.com',
     storageBucket: 'anitier2-b527d.firebasestorage.app',
+    databaseURL: 'https://anitier2-b527d-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1015071636195',
     projectId: 'anitier2-b527d',
     storageBucket: 'anitier2-b527d.firebasestorage.app',
+    databaseURL: 'https://anitier2-b527d-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -63,8 +65,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1015071636195',
     projectId: 'anitier2-b527d',
     storageBucket: 'anitier2-b527d.firebasestorage.app',
-    iosClientId: '1015071636195-88bafoee7oi76c93524d8mbe60cte2ok.apps.googleusercontent.com',
+    iosClientId:
+        '1015071636195-88bafoee7oi76c93524d8mbe60cte2ok.apps.googleusercontent.com',
     iosBundleId: 'com.yonasoft.anitier2',
+    databaseURL: 'https://anitier2-b527d-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,8 +77,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1015071636195',
     projectId: 'anitier2-b527d',
     storageBucket: 'anitier2-b527d.firebasestorage.app',
-    iosClientId: '1015071636195-88bafoee7oi76c93524d8mbe60cte2ok.apps.googleusercontent.com',
+    iosClientId:
+        '1015071636195-88bafoee7oi76c93524d8mbe60cte2ok.apps.googleusercontent.com',
     iosBundleId: 'com.yonasoft.anitier2',
+    databaseURL: 'https://anitier2-b527d-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -84,5 +90,6 @@ class DefaultFirebaseOptions {
     projectId: 'anitier2-b527d',
     authDomain: 'anitier2-b527d.firebaseapp.com',
     storageBucket: 'anitier2-b527d.firebasestorage.app',
+    databaseURL: 'https://anitier2-b527d-default-rtdb.firebaseio.com/',
   );
 }

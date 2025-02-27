@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart'
         PhoneAuthProvider,
         FacebookAuthProvider,
         GithubAuthProvider;
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -63,10 +64,23 @@ class AccountPage extends StatelessWidget {
             },
           );
         } else {
+          final User user = snapshot.data!;
+          final DatabaseReference userRef =
+              FirebaseDatabase.instance.ref('users/${user.uid}');
+
+          userRef.get().then((snapshot) {
+            if (!snapshot.exists) {
+              userRef.set({
+                'displayName': user.displayName ?? '',
+                'email': user.email ?? '',
+                'createdAt': ServerValue.timestamp,
+              });
+            }
+          });
+
           return const CurrentUserPage();
         }
       },
     );
   }
 }
-
