@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:anitier2/src/core/constants.dart';
 import 'package:anitier2/src/features/account/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,8 +36,23 @@ Future<void> showChangeDisplayNameDialog(BuildContext context) async {
                 try {
                   await FirebaseAuth.instance.currentUser
                       ?.updateDisplayName(nameController.text);
+                  final User user = FirebaseAuth.instance.currentUser!;
+                  final DatabaseReference userRef =
+                      FirebaseDatabase.instance.ref('users/${user.uid}');
                   await FirebaseAuth.instance.currentUser?.reload();
-
+                  userRef.get().then((snapshot) {
+                    if (!snapshot.exists) {
+                      // Use set() to create the node if it doesn’t exist
+                      userRef.set({
+                        'displayName': nameController.text,
+                      });
+                    } else {
+                      // Use update() to modify only the displayName field if the node exists
+                      userRef.update({
+                        'displayName': nameController.text,
+                      });
+                    }
+                  });
                   final snackBar = SnackBar(
                     content: Text('Display name updated successfully!'),
                   );
@@ -133,7 +149,6 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                     await FirebaseAuth.instance.currentUser
                         ?.updatePhotoURL(downloadURL);
                     await FirebaseAuth.instance.currentUser!.reload();
-                    Navigator.of(context).pop();
                   } on FirebaseException catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -143,7 +158,9 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                         ),
                       ),
                     );
-                  } 
+                  } finally {
+                    Navigator.of(context).pop();
+                  }
                 },
                 icon: Icon(Icons.photo_library),
                 label: Text('Pick from device'),

@@ -1,7 +1,7 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-
 
 class Tier {
   String rank;
@@ -68,21 +68,21 @@ class Tier {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is Tier &&
-        other.rank == rank &&
-        other.description == description &&
-        other.color == color &&
-        listEquals(other.tierItems, tierItems) &&
-        listEquals(other.tierItemIds, tierItemIds);
+      other.rank == rank &&
+      other.description == description &&
+      other.color == color &&
+      listEquals(other.tierItems, tierItems) &&
+      listEquals(other.tierItemIds, tierItemIds);
   }
 
   @override
   int get hashCode {
     return rank.hashCode ^
-        description.hashCode ^
-        color.hashCode ^
-        tierItems.hashCode ^
-        tierItemIds.hashCode;
+      description.hashCode ^
+      color.hashCode ^
+      tierItems.hashCode ^
+      tierItemIds.hashCode;
   }
 }
