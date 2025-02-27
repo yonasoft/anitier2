@@ -40,14 +40,12 @@ Future<void> showChangeDisplayNameDialog(BuildContext context) async {
                   final DatabaseReference userRef =
                       FirebaseDatabase.instance.ref('users/${user.uid}');
                   await FirebaseAuth.instance.currentUser?.reload();
-                  userRef.get().then((snapshot) {
+                  await userRef.get().then((snapshot) {
                     if (!snapshot.exists) {
-                      // Use set() to create the node if it doesn’t exist
                       userRef.set({
                         'displayName': nameController.text,
                       });
                     } else {
-                      // Use update() to modify only the displayName field if the node exists
                       userRef.update({
                         'displayName': nameController.text,
                       });
@@ -224,7 +222,7 @@ Future<bool> showDeleteConfirmationDialog(
               String? deleteTextError;
               String? emailError;
 
-              void validateAndSubmit() {
+              Future<void> validateAndSubmit() async {
                 final deleteText = deleteTextController.text.trim();
                 final email = emailController.text.trim();
 
@@ -241,6 +239,17 @@ Future<bool> showDeleteConfirmationDialog(
                 });
 
                 if (deleteTextError == null && emailError == null) {
+                  final user = FirebaseAuth.instance.currentUser!;
+                  await deleteExistingUserPhoto();
+
+                  final DatabaseReference userRef =
+                      FirebaseDatabase.instance.ref('users/${user.uid}');
+                  await userRef.get().then((snapshot) {
+                    if (snapshot.exists) {
+                      userRef.remove();
+                    }
+                  });
+                  user.delete();
                   Navigator.of(context).pop(true);
                 }
               }
