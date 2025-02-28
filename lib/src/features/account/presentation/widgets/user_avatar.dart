@@ -20,8 +20,11 @@ class UserProfileAvatar extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: 112,
                 height: 112,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const CircularProgressIndicator();
+                },
                 errorBuilder: (context, url, error) {
-                  print("Image load error: $error");
                   return const Icon(Icons.account_circle, size: 56);
                 },
               )
