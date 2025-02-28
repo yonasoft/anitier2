@@ -106,7 +106,7 @@ Future<bool> showSignOutDialog(BuildContext context) async {
 
 Future<void> showAvatarSelectionDialog(BuildContext context) async {
   TextEditingController urlController = TextEditingController();
-  File? _imageFile;
+  File? imageFile;
 
   await showDialog(
     context: context,
@@ -132,7 +132,7 @@ Future<void> showAvatarSelectionDialog(BuildContext context) async {
                   try {
                     final pickedImage = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
-                    _imageFile = File(pickedImage!.path);
+                    imageFile = File(pickedImage!.path);
                     final bytes = await pickedImage.readAsBytes();
                     final storageRef = FirebaseStorage.instance.ref();
                     final profilePictureRef = storageRef.child(

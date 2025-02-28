@@ -65,6 +65,6 @@ Future<bool> deleteExistingUserPhoto() async {
     if (e.code == 'object-not-found') {
       return false;
     }
-    throw e;
+    rethrow;
   }
 }
